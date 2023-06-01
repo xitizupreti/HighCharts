@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import { render } from "react-dom";
+import Card from "./Cards";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
-const url="https://gss.wscada.net/api/socket/HPL/response";
-
+const url = "https://gss.wscada.net/api/socket/HPL/response";
 
 const App = () => {
-
   const [data, setData] = useState([]);
 
   const options = {
@@ -36,7 +35,12 @@ const App = () => {
   return (
     <>
       <div>
-        <HighchartsReact highcharts={Highcharts} options={options} />
+        {data.map((item, index) => (
+          <>
+            <Card key={index} name={item.name} des={item.description} />
+            <HighchartsReact highcharts={Highcharts} options={options} />
+          </>
+        ))}
       </div>
     </>
   );
