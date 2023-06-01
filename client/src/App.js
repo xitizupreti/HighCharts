@@ -9,23 +9,34 @@ const url = "https://gss.wscada.net/api/socket/HPL/response";
 const App = () => {
   const [data, setData] = useState([]);
 
-  const options = {
+  const options = data.map((item, index) => ({
     title: {
-      text: "My chart",
+      text: item.name,
+      align: "center",
     },
     series: [
       {
-        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 100],
+        name: item?.observations.map((series_name) => series_name.series_name),
+        data: item?.observations[0]?.data?.map((value) => value.value),
       },
     ],
-  };
+    yAxis: {
+      title: {
+        text: "Water level",
+      },
+    },
+    xAxis: {
+      type:'datetime'
+    },
+
+    
+  }));
   useEffect(() => {
     async function Data() {
       try {
         const response = await axios.get(`${url}`);
         console.log(response.data);
         setData(response.data);
-        // setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -37,8 +48,8 @@ const App = () => {
       <div>
         {data.map((item, index) => (
           <>
-            <Card key={index} name={item.name} des={item.description} />
-            <HighchartsReact highcharts={Highcharts} options={options} />
+            {/* <Card key={index} name={item.name} des={item.description} /> */}
+            <HighchartsReact highcharts={Highcharts} options={options[index]} />
           </>
         ))}
       </div>
