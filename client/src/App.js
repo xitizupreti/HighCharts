@@ -8,7 +8,8 @@ const url = "https://gss.wscada.net/api/socket/HPL/response";
 
 const App = () => {
   const [data, setData] = useState([]);
-
+const d=1262736000000;
+const p=0.15;
   const options = data.map((item, index) => ({
     title: {
       text: item.name,
@@ -17,7 +18,11 @@ const App = () => {
     series: [
       {
         name: item?.observations.map((series_name) => series_name.series_name),
-        data: item?.observations[0]?.data?.map((value) => value.value),
+        data: [
+          [1262304000000, 0],
+          [d, p],
+          [1263168000000, 0.19],
+        ],
       },
     ],
     yAxis: {
@@ -26,10 +31,8 @@ const App = () => {
       },
     },
     xAxis: {
-      type:'datetime'
+      type: "datetime",
     },
-
-    
   }));
   useEffect(() => {
     async function Data() {
