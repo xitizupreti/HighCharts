@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { render } from "react-dom";
-import Card from "./Cards";
+// import Card from "./Cards";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
@@ -8,8 +8,9 @@ const url = "https://gss.wscada.net/api/socket/HPL/response";
 
 const App = () => {
   const [data, setData] = useState([]);
-const d=1262736000000;
-const p=0.15;
+  // var myDate = new Date("2012-02-10T13:19:11+0000");
+  // var result = myDate.getTime();
+  // console.log(result);
   const options = data.map((item, index) => ({
     title: {
       text: item.name,
@@ -18,11 +19,20 @@ const p=0.15;
     series: [
       {
         name: item?.observations.map((series_name) => series_name.series_name),
-        data: [
-          [1262304000000, 0],
-          [d, p],
-          [1263168000000, 0.19],
-        ],
+        data: item?.observations[0]?.data?.map((value) => {
+          const date = new Date(value.datetime);
+          const year = date.getFullYear();
+          const month = date.getMonth();
+          const day = date.getDate();
+          const hour = date.getHours();
+          const minute = date.getMinutes();
+          const second = date.getSeconds();
+          const millisecond = date.getMilliseconds();
+          return [
+            Date.UTC(year, month, day, hour, minute, second, millisecond),
+            value.value,
+          ];
+        }),
       },
     ],
     yAxis: {
